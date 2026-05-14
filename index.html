@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhruv Kumar</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: Inter, Arial, sans-serif;
+}
+
+body {
+  background: #020617;
+  color: #f8fafc;
+  overflow-x: hidden;
+  min-height: 100vh;
+  padding-left: 240px;
+  position: relative;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Animated Background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(59,130,246,.18), transparent 30%),
+    radial-gradient(circle at 80% 30%, rgba(139,92,246,.15), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(16,185,129,.12), transparent 25%);
+  animation: bgMove 14s ease-in-out infinite alternate;
+  z-index: -1;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes bgMove {
+  to { transform: scale(1.15) translateY(-20px); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+/* ================= NAVBAR ================= */
+nav {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  height: calc(100vh - 36px);
+  width: 220px;
+  z-index: 1000;
+
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+
+  border-radius: 28px;
+  padding: 28px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  box-shadow: 0 12px 40px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.1);
+  overflow: hidden;
+  transition: 0.5s ease;
+}
+
+/* bubbles */
+nav::before,
+nav::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(3px);
+  z-index: -1;
+  animation: floatBubble 8s ease-in-out infinite alternate;
+}
+
+nav::before {
+  width: 90px;
+  height: 90px;
+  top: 10px;
+  right: -20px;
+  background: rgba(96,165,250,.22);
+}
+
+nav::after {
+  width: 70px;
+  height: 70px;
+  bottom: 40px;
+  left: -15px;
+  background: rgba(168,85,247,.22);
+  animation-duration: 10s;
+}
+
+@keyframes floatBubble {
+  from { transform: translateY(0) translateX(0); }
+  to { transform: translateY(-25px) translateX(14px); }
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 18px;
+  font-weight: 700;
+  position: relative;
+  overflow: hidden;
+  transition: .35s;
+  background: rgba(20, 20, 19, 0.283);
+}
+
+nav a::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  top: 50%;
+  left: -24px;
+  transform: translateY(-50%);
+  background: rgba(17, 76, 147, 0.32);
+  transition: .4s;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  left: 18px;
+  bottom: 8px;
+  width: 0;
+  height: 2px;
+  border-radius: 10px;
+  background: linear-gradient(90deg,#60a5fa,#a78bfa);
+  transition: .4s;
+}
+
+nav a:hover {
+  transform: translateX(6px);
+  background: rgba(255,255,255,.08);
+}
+
+nav a:hover::before { left: 12px; }
+nav a:hover::after { width: 70%; }
+
+/* UI Controls (Theme & Lang) */
+.controls {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.controls button, .controls select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  outline: none;
+  font-weight: 600;
+  transition: 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.top-controls {
+  width: auto;
+}
+
+@media(max-width: 768px) {
+  .controls {
+    top: 10px;
+    right: 10px;
+    left: auto;
+    width: auto;
+    flex-wrap: wrap;
+    padding: 8px;
+  }
+}
+.controls select {
+  appearance: none;
+  text-align: center;
+}
+
+.controls select option {
+  background: #020617;
+  color: #fff;
+}
+
+.controls button:hover, .controls select:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Sticky Name in Navbar */
+.nav-name {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: .4s ease;
+}
+
+.nav-name.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+nav.show-sticky-name {
+  padding-bottom: 60px;
+}
+
+.nav-name p {
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* ================= HERO ================= */
+header {
+  min-height: 78vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 100px 20px 80px;
+  background: linear-gradient(180deg, #8ea5fa6b, #0d2767);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255,255,255,.08), transparent 25%);
+}
+
+.hero {
+  max-width: 760px;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: clamp(3.5rem, 9vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(90deg, #60a5fa, #fff, #a78bfa);
+  -webkit-background-clip: text;
+  color: transparent;
+  transition: 0.5s ease;
+}
+
+.hero .subtitle {
+  margin-top: 20px;
+  color: #cbd5e1;
+  transition: color 0.5s ease;
+}
+
+.hero .details {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.hero .details a {
+  color: #38bdf8;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .3s ease, border-color .3s ease, transform .2s ease;
+}
+
+.hero .details a:hover {
+  color: #7dd3fc;
+  border-color: #7dd3fc;
+  transform: translateY(-1px);
+}
+
+.card a {
+  display: inline-block;
+  margin-top: 12px;
+  color: #38bdf8;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .3s ease, border-color .3s ease, transform .2s ease;
+}
+
+.card a:hover {
+  color: #7dd3fc;
+  border-color: #7dd3fc;
+  transform: translateY(-1px);
+}
+
+.btns {
+  margin-top: 24px;
+}
+
+.btns a {
+  display: inline-block;
+  margin: 6px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  color: #fff;
+  text-decoration: none;
+  transition: .35s;
+}
+
+.btns a:hover {
+  transform: translateY(-4px);
+}
+
+/* Sections */
+section {
+  scroll-margin-top: 100px;
+  max-width: 950px;
+  margin: auto;
+  padding: 90px 20px 50px;
+}
+nav a.active {
+  background: rgba(96, 165, 250, 0.2);
+  transform: translateX(10px);
+  color: #60a5fa;
+}
+
+nav a.active::after {
+  width: 70%;
+}
+h2 {
+  font-size: 2rem;
+  margin-bottom: 22px;
+  border-left: 5px solid #000000;
+  padding-left: 12px;
+  transition: color 0.5s ease;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: rgba(30,41,59,.78);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 22px;
+  border-radius: 22px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.22);
+  transition: .35s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 45px rgba(59,130,246,.18);
+}
+
+.resume-list {
+  padding-left: 18px;
+  margin-top: 14px;
+}
+
+.resume-list li {
+  margin-bottom: 10px;
+}
+
+.resume-meta {
+  color: #94a3b8;
+  margin: 10px 0;
+  transition: color 0.5s ease;
+}
+
+.tag-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-block span {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(96,165,250,.14);
+  color: #bfdbfe;
+}
+
+img.project-img {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+footer {
+  text-align: center;
+  padding: 24px;
+  color: #94a3b8;
+}
+
+/* Mouse Orb */
+.floatOrb {
+  position: fixed;
+  width: 20px;   /* Slightly larger for better visibility */
+  height: 20px;
+  border-radius: 50%;
+  background: #60a5fa;
+  filter: blur(4px);
+  pointer-events: none;
+  opacity: .6;
+  z-index: 9999;
+  /* Ensure no transitions interfere with live tracking */
+  transition: none; 
+  /* Center the element on its coordinate */
+  left: 0;
+  top: 0;
+}
+
+/* ================= LIGHT MODE THEME ================= */
+body.light-mode {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+body.light-mode::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(59,130,246,.1), transparent 30%),
+    radial-gradient(circle at 80% 30%, rgba(139,92,246,.08), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(16,185,129,.05), transparent 25%);
+}
+
+body.light-mode nav {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+body.light-mode nav a, body.light-mode .nav-name p {
+  color: #0f172a;
+}
+
+body.light-mode nav a:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode header {
+  background: linear-gradient(180deg, #e0e7ff, #f8fafc);
+}
+
+body.light-mode .hero h1 {
+  background: linear-gradient(90deg, #1e40af, #6b21a8);
+  -webkit-background-clip: text;
+}
+
+body.light-mode .hero .subtitle {
+  color: #475569;
+}
+
+body.light-mode .hero .details a {
+  color: #0284c7;
+}
+
+body.light-mode .card {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 12px 30px rgba(0,0,0,.05);
+  color: #334155;
+}
+
+body.light-mode .card:hover {
+  box-shadow: 0 24px 45px rgba(59,130,246,.1);
+}
+
+body.light-mode .resume-meta {
+  color: #64748b;
+}
+
+body.light-mode .tag-block span {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+}
+
+body.light-mode .controls select option {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+body.light-mode .controls button, body.light-mode .controls select {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile */
+@media(max-width: 768px) {
+  body { padding-left: 0; }
+  
+  nav {
+    top: 70px; left: 10px; right: auto;
+    width: calc(100% - 20px);
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+  
+  nav a { padding: 10px 14px; font-size: .85rem; margin-right: 8px; }
+  
+  .controls {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: auto;
+    flex-wrap: wrap;
+    padding: 8px;
+  }
+
+  header { padding-top: 180px; }
+}
+</style>
+</head>
+
+<!-- Replace ONLY your existing body code with this updated version -->
+<body>
+
+<div class="floatOrb" id="orb"></div>
+
+<nav>
+  <a href="#about" data-lang="nav-about">👤 About</a>
+  <a href="#projects" data-lang="nav-projects">💼 Projects</a>
+  <a href="#experience" data-lang="nav-experience">📈 Experience</a>
+  <a href="#skills" data-lang="nav-skills">⚡ Skills</a>
+  <a href="#education" data-lang="nav-education">🎓 Education</a>
+
+  <div class="nav-name" id="navName">
+    <p>Dhruv Kumar</p>
+  </div>
+</nav>
+
+<div class="top-controls controls">
+  <button id="themeToggle" aria-label="Toggle Theme">☀️</button>
+  <select id="langToggle">
+    <option value="en">EN</option>
+    <option value="hi">HI</option>
+  </select>
+</div>
+
+<header>
+<div class="hero">
+  <h1>Dhruv Kumar</h1>
+  <div class="subtitle" data-lang="hero-subtitle">
+    Software Engineer • Full-Stack Developer • AI Integration Engineer
+  </div>
+
+  <div class="details">
+    <span data-lang="hero-loc">📍 Ghaziabad, India</span>
+    <span><a href="mailto:kdhruv728@gmail.com">📧 kdhruv728@gmail.com</a></span>
+    <span><a href="https://wa.me/919310355462" target="_blank" rel="noreferrer">📞 +91 9310355462</a></span>
+  </div>
+
+  <div class="details">
+    <a href="#">🐙 GitHub</a> | <a href="#">🔗 LinkedIn</a>
+  </div>
+
+  <div class="btns">
+    <a href="#projects" data-lang="btn-work">🚀 View Work</a>
+    <a href="#contact" data-lang="btn-contact">📩 Contact</a>
+  </div>
+</div>
+</header>
+
+<section id="about">
+  <h2 data-lang="sec-about">👨‍💻 Professional Summary</h2>
+  <div class="card">
+    <span data-lang="about-desc">Experienced software engineer with a strong foundation in MERN stack, Python automation, AI integration, and cloud-native solutions.</span>
+    <ul class="resume-list">
+      <li data-lang="about-l1">Designed full-stack applications with React, Node.js, Express, and MongoDB.</li>
+      <li data-lang="about-l2">Built AI-enabled conversational interfaces and automation tools.</li>
+      <li data-lang="about-l3">Delivered production-ready projects with testing and quality standards.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="experience">
+  <h2 data-lang="sec-exp">💼 Experience</h2>
+  <div class="grid">
+    <div class="card">
+      <h3 data-lang="exp-1-title">💻 Software Developer — Apple Tree</h3>
+      <div class="resume-meta" data-lang="exp-1-date">June 2022 – July 2023 | Ghaziabad</div>
+      <p data-lang="exp-1-desc">Developed desktop banking software using Python, Tkinter and MySQL.</p>
+    </div>
+
+    <div class="card">
+      <h3 data-lang="exp-2-title">🌐 Full Stack Projects</h3>
+      <div class="resume-meta" data-lang="exp-2-date">2023 – Present</div>
+      <p data-lang="exp-2-desc">Designed modern web apps with AI integration and scalable systems.</p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <h2 data-lang="sec-proj">🚀 Highlighted Projects</h2>
+
+  <div class="grid">
+
+    <div class="card">
+      <img class="project-img" src="projccts copy/nowere.png" alt="Conversational AI">
+      <h3 style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+        🤖 Conversational AI Platform
+        <span style="font-size:0.7rem;color:#ef4444;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.1);padding:3px 8px;border-radius:12px;">🔴 LIVE (SOON)</span>
+      </h3>
+      <p data-lang="proj-1-desc" style="margin-bottom:8px;font-size:0.95rem;line-height:1.5;">
+        Implemented reusable AI response packets allowing users to multi-select responses, share grouped message bundles, display packet counters, and reconstruct conversations on recipient devices.
+      </p>
+      <div class="resume-meta" style="font-size:0.85rem;margin-bottom:16px;">
+        <strong>Tech:</strong> MERN Stack, Real-time APIs, State Management<br>
+        <em>(2026 – Present)</em>
+      </div>
+      <a href="https://drive.google.com/file/d/1L3xkFE7fNrZslouBmZyQfzVt_AN1X88m/view?usp=sharing" target="_blank">View Project ➔</a>
+    </div>
+
+    <div class="card">
+      <img class="project-img" src="projccts copy/school.png" alt="School Management">
+      <h3 style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+        🏫 School Management System
+        <span style="font-size:0.7rem;color:#ef4444;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.1);padding:3px 8px;border-radius:12px;">🔴 LIVE</span>
+      </h3>
+      <p data-lang="proj-2-desc" style="margin-bottom:8px;font-size:0.95rem;line-height:1.5;">
+        MERN-based web application with role-based access (Admin, Teacher, Student). Deployed on Render (Backend) & Netlify (Frontend).
+      </p>
+      <div class="resume-meta" style="font-size:0.85rem;margin-bottom:16px;">
+        <strong>Tech:</strong> React.js, Node.js, Express.js, MongoDB
+      </div>
+      <a href="https://sms4u.netlify.app/" target="_blank">View Project ➔</a>
+    </div>
+
+    <div class="card">
+      <img class="project-img" src="projccts copy/jarvis.png" alt="Jarvis AI">
+      <h3 data-lang="proj-3-title">🧠 Jarvis AI Assistant</h3>
+      <p data-lang="proj-3-desc" style="margin-bottom:8px;font-size:0.95rem;line-height:1.5;">
+        Voice-controlled AI assistant with system automation, web search, WhatsApp & YouTube control, AI content & image generation.
+      </p>
+      <div class="resume-meta" style="font-size:0.85rem;margin-bottom:16px;">
+        <strong>Tech:</strong> Python, MySQL, Groq API, Hugging Face, PyQt5<br>
+        <em>(Apr 2025 – Present)</em>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills">
+  <h2 data-lang="sec-skills">⚡ Technical Skills</h2>
+  <div class="card">
+    <h3>🛠 Skills Summary</h3>
+    <p><strong>Languages:</strong> Java, Python, SQL, HTML, CSS, JavaScript</p>
+    <p><strong>Frameworks:</strong> React.js, Node.js, Express.js (REST APIs)</p>
+    <p><strong>Databases:</strong> MySQL, MongoDB</p>
+    <p><strong>Tools:</strong> Git, OOPS, SQL, VS Code, Postman, Docker</p>
+    <p><strong>Platforms:</strong> Windows, Web, Linux (Bash), MySQL Server</p>
+  </div>
+
+  <div class="card tag-block">
+    <span>☕ Java</span><span>🐍 Python</span><span>⚛ React.js</span>
+    <span>🟢 Node.js</span><span>🚀 Express.js</span><span>🍃 MongoDB</span>
+    <span>🛢 MySQL</span><span>🐳 Docker</span><span>🔧 Git</span>
+    <span>🐧 Linux</span><span>🔗 REST APIs</span>
+  </div>
+</section>
+
+<section id="education">
+  <h2 data-lang="sec-edu">🎓 Education</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h3>🏛 ABES Engineering College</h3>
+      <p data-lang="edu-1">B.Tech CSE (2024 – 2027)</p>
+    </div>
+
+    <div class="card">
+      <h3 data-lang="edu-2-title">🏫 Government Polytechnic Ghaziabad</h3>
+      <p data-lang="edu-2">Diploma IT (2020 – 2023)</p>
+    </div>
+
+    <div class="card">
+      <h3>📘 St Josephs Academy</h3>
+      <p data-lang="edu-3">10th ICSE</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact">
+  <h2 data-lang="sec-contact">📞 Contact</h2>
+  <div class="card">
+    <span data-lang="cont-email">📧 Email:</span> kdhruv728@gmail.com <br><br>
+    <span data-lang="cont-phone">📞 Phone:</span> +91 9310355462 <br><br>
+    <span data-lang="cont-loc">📍 Location:</span> Ghaziabad, India
+  </div>
+</section>
+
+<footer>
+  <span data-lang="footer">© 2026 Dhruv Kumar | 🚀 Portfolio</span>
+</footer>
+
+
+<script>
+/* Mouse Orb Tracking */
+const orb = document.getElementById('orb');
+
+window.addEventListener('mousemove', e => {
+  // Use requestAnimationFrame for smoother performance
+  window.requestAnimationFrame(() => {
+    // 10 is half of the width/height (20px) defined in CSS
+    const x = e.clientX - 10; 
+    const y = e.clientY - 10;
+    orb.style.transform = `translate(${x}px, ${y}px)`;
+  });
+});
+
+/* Sticky Name in Navbar */
+const navName = document.getElementById('navName');
+const nav = document.querySelector('nav');
+const header = document.querySelector('header');
+
+window.addEventListener('scroll', () => {
+  const headerHeight = header.offsetHeight;
+  if(window.scrollY > headerHeight - 100){
+    navName.classList.add('visible');
+    nav.classList.add('show-sticky-name');
+  } else {
+    navName.classList.remove('visible');
+    nav.classList.remove('show-sticky-name');
+  }
+});
+
+/* ================= THEME TOGGLE ================= */
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  if (document.body.classList.contains('light-mode')) {
+    themeToggle.textContent = '🌙'; // Switch to Moon icon in light mode
+  } else {
+    themeToggle.textContent = '☀️'; // Switch to Sun icon in dark mode
+  }
+});
+
+/* ================= LANGUAGE TOGGLE ================= */
+const langToggle = document.getElementById('langToggle');
+
+// Dictionary for translations
+const translations = {
+  en: {
+    "nav-about": "About", "nav-projects": "Projects", "nav-experience": "Experience", "nav-skills": "Skills", "nav-education": "Education",
+    "hero-subtitle": "Software Engineer • Full-Stack Developer • AI Integration Engineer", "hero-loc": "📍 Ghaziabad, India",
+    "btn-work": "View Work", "btn-contact": "Contact",
+    "sec-about": "Professional Summary",
+    "about-desc": "Experienced software engineer with a strong foundation in MERN stack, Python automation, AI integration, and cloud-native solutions.",
+    "about-l1": "Designed full-stack applications with React, Node.js, Express, and MongoDB.",
+    "about-l2": "Built AI-enabled conversational interfaces and automation tools.",
+    "about-l3": "Delivered production-ready projects with testing and quality standards.",
+    "sec-exp": "Experience", "exp-1-title": "Software Developer — Apple Tree", "exp-1-date": "June 2022 – July 2023 | Ghaziabad",
+    "exp-1-desc": "Developed desktop banking software using Python, Tkinter and MySQL.",
+    "exp-2-title": "Full Stack Projects", "exp-2-date": "2023 – Present", "exp-2-desc": "Designed modern web apps with AI integration and scalable systems.",
+    "sec-proj": "Highlighted Projects", "proj-1-desc": "ChatGPT-like intelligent messaging system.",
+    "proj-2-title": "School Management System", "proj-2-desc": "Admin / Teacher / Student portal with dashboards.",
+    "proj-3-title": "Jarvis AI Assistant", "proj-3-desc": "Voice assistant with automation tools and AI generation.",
+    "sec-gallery": "Project Showcase", "sec-skills": "Technical Skills", "sec-edu": "Education",
+    "edu-1": "B.Tech CSE (2024 – 2027)", "edu-2-title": "Government Polytechnic Ghaziabad", "edu-2": "Diploma IT (2020 – 2023)", "edu-3": "10th ICSE",
+    "sec-contact": "Contact", "cont-email": "Email:", "cont-phone": "Phone:", "cont-loc": "Location:",
+    "footer": "© 2026 Dhruv Kumar | Premium Animated Portfolio"
+  },
+  hi: {
+    "nav-about": "परिचय", "nav-projects": "प्रोजेक्ट्स", "nav-experience": "अनुभव", "nav-skills": "कौशल", "nav-education": "शिक्षा",
+    "hero-subtitle": "सॉफ्टवेयर इंजीनियर • फुल-स्टैक डेवलपर • एआई इंटीग्रेशन इंजीनियर", "hero-loc": "📍 गाजियाबाद, भारत",
+    "btn-work": "काम देखें", "btn-contact": "संपर्क करें",
+    "sec-about": "व्यावसायिक सारांश",
+    "about-desc": "MERN स्टैक, पायथन ऑटोमेशन, एआई इंटीग्रेशन और क्लाउड-नेटिव समाधानों में मजबूत आधार के साथ अनुभवी सॉफ्टवेयर इंजीनियर।",
+    "about-l1": "React, Node.js, Express और MongoDB के साथ फुल-स्टैक एप्लिकेशन डिज़ाइन किए।",
+    "about-l2": "एआई-सक्षम संवादात्मक इंटरफेस और ऑटोमेशन टूल बनाए।",
+    "about-l3": "परीक्षण और गुणवत्ता मानकों के साथ उत्पादन-तैयार प्रोजेक्ट्स वितरित किए।",
+    "sec-exp": "अनुभव", "exp-1-title": "सॉफ्टवेयर डेवलपर — एप्पल ट्री", "exp-1-date": "जून 2022 – जुलाई 2023 | गाज़ियाबाद",
+    "exp-1-desc": "पायथन, टिंकर और MySQL का उपयोग करके डेस्कटॉप बैंकिंग सॉफ्टवेयर विकसित किया।",
+    "exp-2-title": "फुल स्टैक प्रोजेक्ट्स", "exp-2-date": "2023 – वर्तमान", "exp-2-desc": "एआई इंटीग्रेशन और स्केलेबल सिस्टम के साथ आधुनिक वेब ऐप डिज़ाइन किए।",
+    "sec-proj": "प्रमुख प्रोजेक्ट्स", "proj-1-desc": "चैटजीपीटी जैसी बुद्धिमान मैसेजिंग प्रणाली।",
+    "proj-2-title": "स्कूल प्रबंधन प्रणाली", "proj-2-desc": "डैशबोर्ड के साथ एडमिन / टीचर / स्टूडेंट पोर्टल।",
+    "proj-3-title": "जार्विस एआई असिस्टेंट", "proj-3-desc": "ऑटोमेशन टूल्स और एआई जनरेशन के साथ वॉयस असिस्टेंट।",
+    "sec-gallery": "प्रोजेक्ट शोकेस", "sec-skills": "तकनीकी कौशल", "sec-edu": "शिक्षा",
+    "edu-1": "बी.टेक सीएसई (2024 – 2027)", "edu-2-title": "राजकीय पॉलिटेक्निक गाजियाबाद", "edu-2": "डिप्लोमा आईटी (2020 – 2023)", "edu-3": "10वीं ICSE",
+    "sec-contact": "संपर्क करें", "cont-email": "ईमेल:", "cont-phone": "फ़ोन:", "cont-loc": "स्थान:",
+    "footer": "© 2026 ध्रुव कुमार | प्रीमियम एनिमेटेड पोर्टफोलियो"
+  }
+};
+
+langToggle.addEventListener('change', (e) => {
+  const lang = e.target.value;
+  const elements = document.querySelectorAll('[data-lang]');
+  
+  elements.forEach(el => {
+    const key = el.getAttribute('data-lang');
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
+});
+</script>
+
+</body>
+</html>
